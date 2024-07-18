@@ -2,6 +2,7 @@ package skill
 
 import (
 	"database/sql"
+	"encoding/json"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -70,6 +71,25 @@ func (handler *SkillHandler) GetAllHandler(ctx *gin.Context) {
 	responseSuccessWithData(ctx, skills, http.StatusOK)
 }
 
+func (handler *SkillHandler) CreateHandler(ctx *gin.Context) {
+	var skill Skill
+
+	if err := ctx.BindJSON(&skill); err != nil {
+		responseError(ctx, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	skillString, err := parseToString(skill)
+
+	if err != nil {
+		responseError(ctx, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	sendMessage(skillString, "create")
+	responseSuccess(ctx, "Creating Skill...", http.StatusOK)
+}
+
 func mapRowToSkill(row *sql.Row) (Skill, error) {
 	var skill Skill
 	err := row.Scan(&skill.Key, &skill.Name, &skill.Description, &skill.Logo, pq.Array(&skill.Tags))
@@ -82,7 +102,22 @@ func responseError(ctx *gin.Context, message string, statusCode int) {
 	ctx.JSON(statusCode, response)
 }
 
+func responseSuccess(ctx *gin.Context, message string, statusCode int) {
+	response := Response{Status: "success", Message: message}
+	ctx.JSON(statusCode, response)
+}
+
 func responseSuccessWithData[responseData ResponseData](ctx *gin.Context, data responseData, statusCode int) {
 	response := ResponseWithData[responseData]{Status: "success", Data: data}
 	ctx.JSON(statusCode, response)
+}
+
+func parseToString[responseData ResponseData](data responseData) (string, error) {
+	productsJson, err := json.Marshal(data)
+
+	if err != nil {
+		return "", err
+	}
+
+	return string(productsJson), nil
 }
