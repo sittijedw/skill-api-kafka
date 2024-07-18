@@ -45,6 +45,31 @@ func (handler *SkillHandler) GetByKeyHandler(ctx *gin.Context) {
 	responseSuccessWithData(ctx, skill, http.StatusOK)
 }
 
+func (handler *SkillHandler) GetAllHandler(ctx *gin.Context) {
+	rows, err := handler.repository.findAll()
+
+	if err != nil {
+		responseError(ctx, "Can't get all skills", http.StatusInternalServerError)
+		return
+	}
+
+	var skills = make([]Skill, 0)
+	for rows.Next() {
+		var skill Skill
+
+		err := rows.Scan(&skill.Key, &skill.Name, &skill.Description, &skill.Logo, pq.Array(&skill.Tags))
+
+		if err != nil {
+			responseError(ctx, "Can't scan row to skill struct", http.StatusInternalServerError)
+			return
+		}
+
+		skills = append(skills, skill)
+	}
+
+	responseSuccessWithData(ctx, skills, http.StatusOK)
+}
+
 func mapRowToSkill(row *sql.Row) (Skill, error) {
 	var skill Skill
 	err := row.Scan(&skill.Key, &skill.Name, &skill.Description, &skill.Logo, pq.Array(&skill.Tags))

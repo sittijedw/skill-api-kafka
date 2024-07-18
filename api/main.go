@@ -34,6 +34,7 @@ func main() {
 	v1 := r.Group("/api/v1")
 	{
 		v1.GET("/skills/:key", skillHandler.GetByKeyHandler)
+		v1.GET("/skills", skillHandler.GetAllHandler)
 	}
 
 	srv := http.Server{
