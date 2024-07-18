@@ -36,6 +36,7 @@ func main() {
 		v1.GET("/skills/:key", skillHandler.GetByKeyHandler)
 		v1.GET("/skills", skillHandler.GetAllHandler)
 		v1.POST("/skills", skillHandler.CreateHandler)
+		v1.PUT("/skills/:key", skillHandler.UpdateByKeyHandler)
 	}
 
 	srv := http.Server{

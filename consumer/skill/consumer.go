@@ -1,13 +1,30 @@
 package skill
 
-import "github.com/IBM/sarama"
+import (
+	"strings"
+
+	"github.com/IBM/sarama"
+)
 
 func ConsumeMessage(msg *sarama.ConsumerMessage, handler SkillHandler) {
 	topic, key, value := msg.Topic, string(msg.Key), msg.Value
 
+	splitKey := strings.Split(key, "-")
+
+	var action string
+	if len(splitKey) > 2 {
+		action = splitKey[0] + splitKey[1]
+	} else {
+		action = splitKey[0]
+	}
+
+	skillKey := splitKey[len(splitKey)-1]
+
 	if topic == "skill" {
-		if key == "create" {
+		if action == "create" {
 			handler.createHandler(value)
+		} else if action == "update" {
+			handler.updateByKeyHandler(value, skillKey)
 		}
 	}
 }

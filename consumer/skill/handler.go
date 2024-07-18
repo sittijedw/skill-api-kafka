@@ -31,6 +31,24 @@ func (handler *SkillHandler) createHandler(data []byte) {
 	}
 }
 
+func (handler *SkillHandler) updateByKeyHandler(data []byte, skillKey string) {
+	skill, err := parseToSkill(data)
+
+	if err != nil {
+		log.Println("Error: Can't parse to skill struct")
+		return
+	}
+
+	row := handler.repository.updateByKey(skill, skillKey)
+
+	err = row.Scan(&skill.Key)
+
+	if err != nil {
+		log.Println("Error: Unable to update skill")
+		return
+	}
+}
+
 func parseToSkill(data []byte) (Skill, error) {
 	var skill Skill
 	err := json.Unmarshal([]byte(data), &skill)
