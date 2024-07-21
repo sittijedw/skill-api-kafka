@@ -27,6 +27,8 @@ func ConsumeMessage(msg *sarama.ConsumerMessage, handler SkillHandler) {
 			handler.updateByKeyHandler(value, skillKey)
 		} else if action == "update-name" {
 			handler.updateNameByKeyHandler(value, skillKey)
+		} else if action == "update-description" {
+			handler.updateDescriptionByKeyHandler(value, skillKey)
 		}
 	}
 }

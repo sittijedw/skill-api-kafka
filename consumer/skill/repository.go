@@ -28,3 +28,8 @@ func (repository *SkillRepository) updateNameByKey(skill Skill, skillKey string)
 	sqlStatement := "UPDATE skill SET name=$1 WHERE key=$2 RETURNING key"
 	return repository.db.QueryRow(sqlStatement, skill.Name, skillKey)
 }
+
+func (repository *SkillRepository) updateDescriptionByKey(skill Skill, skillKey string) *sql.Row {
+	sqlStatement := "UPDATE skill SET description=$1 WHERE key=$2 RETURNING key"
+	return repository.db.QueryRow(sqlStatement, skill.Description, skillKey)
+}

@@ -71,7 +71,9 @@ func (handler *SkillHandler) GetAllHandler(ctx *gin.Context) {
 	responseSuccessWithData(ctx, skills, http.StatusOK)
 }
 
-func (handler *SkillHandler) CreateHandler(ctx *gin.Context) {
+func createAndUpdateSkill(ctx *gin.Context, action string, respMessage string) {
+	key := ctx.Param("key")
+
 	var skill Skill
 
 	if err := ctx.BindJSON(&skill); err != nil {
@@ -86,50 +88,28 @@ func (handler *SkillHandler) CreateHandler(ctx *gin.Context) {
 		return
 	}
 
-	sendMessage(skillString, "create")
-	responseSuccess(ctx, "Creating Skill...", http.StatusOK)
+	if action == "create" {
+		sendMessage(skillString, action)
+	} else {
+		sendMessage(skillString, action+"-"+key)
+	}
+	responseSuccess(ctx, respMessage, http.StatusOK)
+}
+
+func (handler *SkillHandler) CreateHandler(ctx *gin.Context) {
+	createAndUpdateSkill(ctx, "create", "Creating Skill...")
 }
 
 func (handler *SkillHandler) UpdateByKeyHandler(ctx *gin.Context) {
-	key := ctx.Param("key")
-
-	var skill Skill
-
-	if err := ctx.BindJSON(&skill); err != nil {
-		responseError(ctx, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	skillString, err := parseToString(skill)
-
-	if err != nil {
-		responseError(ctx, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	sendMessage(skillString, "update-"+key)
-	responseSuccess(ctx, "Updating Skill...", http.StatusOK)
+	createAndUpdateSkill(ctx, "update", "Updating Skill...")
 }
 
 func (handler *SkillHandler) UpdateNameByKeyHandler(ctx *gin.Context) {
-	key := ctx.Param("key")
+	createAndUpdateSkill(ctx, "update-name", "Updating Skill name...")
+}
 
-	var skill Skill
-
-	if err := ctx.BindJSON(&skill); err != nil {
-		responseError(ctx, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	skillString, err := parseToString(skill)
-
-	if err != nil {
-		responseError(ctx, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	sendMessage(skillString, "update-name-"+key)
-	responseSuccess(ctx, "Updateting Skill name...", http.StatusOK)
+func (handler *SkillHandler) UpdateDescriptionByKeyHandler(ctx *gin.Context) {
+	createAndUpdateSkill(ctx, "update-description", "Updating Skill description...")
 }
 
 func mapRowToSkill(row *sql.Row) (Skill, error) {
