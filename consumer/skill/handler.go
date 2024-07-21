@@ -32,6 +32,8 @@ func (handler *SkillHandler) createAndUpdateSkill(data []byte, action string, sk
 			row = handler.repository.updateNameByKey(skill, skillKey)
 		} else if action == "update-description" {
 			row = handler.repository.updateDescriptionByKey(skill, skillKey)
+		} else if action == "update-logo" {
+			row = handler.repository.updateLogoByKey(skill, skillKey)
 		}
 	}
 
@@ -57,6 +59,10 @@ func (handler *SkillHandler) updateNameByKeyHandler(data []byte, skillKey string
 
 func (handler *SkillHandler) updateDescriptionByKeyHandler(data []byte, skillKey string) {
 	handler.createAndUpdateSkill(data, "update-description", skillKey, "Error: Unable to update skill description")
+}
+
+func (handler *SkillHandler) updateLogoByKeyHandler(data []byte, skillKey string) {
+	handler.createAndUpdateSkill(data, "update-logo", skillKey, "Error: Unable to update skill logo")
 }
 
 func parseToSkill(data []byte) (Skill, error) {
