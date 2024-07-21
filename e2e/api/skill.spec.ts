@@ -199,3 +199,74 @@ test.describe('Create skill', () => {
     await request.delete(apiUrlPrefix + '/skills/python')
   })
 })
+
+test.describe('Update skill', () => {
+  test('should response status "success" with message "Updating Skill..." when request PUT /skills/:key', async ({
+    request,
+  }) => {
+    await request.post(apiUrlPrefix + '/skills',
+      {
+        data: {
+          key: 'python',
+          name: 'Python',
+          description: 'Python is an interpreted, high-level, general-purpose programming language.',
+          logo: 'https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg',
+          tags: ['programming language', 'scripting']
+        }
+      }
+    )
+    
+    const getResponseBefore = await request.get(apiUrlPrefix + '/skills/python')
+  
+    expect(getResponseBefore.ok()).toBeTruthy()
+    expect(await getResponseBefore.json()).toEqual(
+      expect.objectContaining({
+        status: 'success',
+        data: expect.objectContaining({
+          key: 'python',
+          name: 'Python',
+          description: expect.any(String),
+          logo: expect.any(String),
+          tags: expect.arrayContaining(['programming language', 'scripting']),
+        })
+      })
+    )
+
+    const updateResponse = await request.put(apiUrlPrefix + '/skills/python',
+      {
+        data: {
+          name: 'Python 3',
+          description: 'Python 3 is the latest version of Python programming language.',
+          logo: 'https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg',
+          tags: ['data'],
+        }
+      }
+    )
+
+    expect(updateResponse.ok()).toBeTruthy()
+    expect(await updateResponse.json()).toEqual(
+      expect.objectContaining({
+        status: 'success',
+        message: 'Updating Skill...'
+      })
+    )
+
+    const getResponseAfter = await request.get(apiUrlPrefix + '/skills/python')
+  
+    expect(getResponseAfter.ok()).toBeTruthy()
+    expect(await getResponseAfter.json()).toEqual(
+      expect.objectContaining({
+        status: 'success',
+        data: expect.objectContaining({
+          key: 'python',
+          name: 'Python 3',
+          description: 'Python 3 is the latest version of Python programming language.',
+          logo: expect.any(String),
+          tags: expect.arrayContaining(['data']),
+        })
+      })
+    )
+
+    await request.delete(apiUrlPrefix + '/skills/python')
+  })
+})
