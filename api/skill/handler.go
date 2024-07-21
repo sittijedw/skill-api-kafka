@@ -96,6 +96,13 @@ func createAndUpdateSkill(ctx *gin.Context, action string, respMessage string) {
 	responseSuccess(ctx, respMessage, http.StatusOK)
 }
 
+func deleteSkill(ctx *gin.Context, action string, respMessage string) {
+	key := ctx.Param("key")
+
+	sendMessage("", action+"-"+key)
+	responseSuccess(ctx, respMessage, http.StatusOK)
+}
+
 func (handler *SkillHandler) CreateHandler(ctx *gin.Context) {
 	createAndUpdateSkill(ctx, "create", "Creating Skill...")
 }
@@ -118,6 +125,10 @@ func (handler *SkillHandler) UpdateLogoByKeyHandler(ctx *gin.Context) {
 
 func (handler *SkillHandler) UpdateTagsByKeyHandler(ctx *gin.Context) {
 	createAndUpdateSkill(ctx, "update-tags", "Updating Skill tags...")
+}
+
+func (handler *SkillHandler) DeleteByKeyHandler(ctx *gin.Context) {
+	deleteSkill(ctx, "delete", "Deleting Skill...")
 }
 
 func mapRowToSkill(row *sql.Row) (Skill, error) {

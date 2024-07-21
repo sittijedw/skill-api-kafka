@@ -43,3 +43,8 @@ func (repository *SkillRepository) updateTagsByKey(skill Skill, skillKey string)
 	sqlStatement := "UPDATE skill SET tags=$1 WHERE key=$2 RETURNING key"
 	return repository.db.QueryRow(sqlStatement, pq.Array(skill.Tags), skillKey)
 }
+
+func (repository *SkillRepository) deleteByKey(skillKey string) *sql.Row {
+	sqlStatement := "DELETE FROM skill WHERE key=$1 RETURNING key"
+	return repository.db.QueryRow(sqlStatement, skillKey)
+}

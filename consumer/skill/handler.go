@@ -47,6 +47,17 @@ func (handler *SkillHandler) createAndUpdateSkill(data []byte, action string, sk
 	}
 }
 
+func (handler *SkillHandler) deleteSkill(skillKey string, errMessage string) {
+	var skill Skill
+	row := handler.repository.deleteByKey(skillKey)
+	err := row.Scan(&skill.Key)
+
+	if err != nil {
+		log.Println(errMessage)
+		return
+	}
+}
+
 func (handler *SkillHandler) createHandler(data []byte) {
 	handler.createAndUpdateSkill(data, "create", "", "Error: Skill already exists")
 }
@@ -69,6 +80,10 @@ func (handler *SkillHandler) updateLogoByKeyHandler(data []byte, skillKey string
 
 func (handler *SkillHandler) updateTagsByKeyHandler(data []byte, skillKey string) {
 	handler.createAndUpdateSkill(data, "update-tags", skillKey, "Error: Unable to update skill tags")
+}
+
+func (handler *SkillHandler) deleteByKeyHandler(skillKey string) {
+	handler.deleteSkill(skillKey, "Error: Unable to delete skill")
 }
 
 func parseToSkill(data []byte) (Skill, error) {

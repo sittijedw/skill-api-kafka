@@ -33,6 +33,8 @@ func ConsumeMessage(msg *sarama.ConsumerMessage, handler SkillHandler) {
 			handler.updateLogoByKeyHandler(value, skillKey)
 		} else if action == "update-tags" {
 			handler.updateTagsByKeyHandler(value, skillKey)
+		} else if action == "delete" {
+			handler.deleteByKeyHandler(skillKey)
 		}
 	}
 }
