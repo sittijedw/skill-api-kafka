@@ -270,3 +270,71 @@ test.describe('Update skill', () => {
     await request.delete(apiUrlPrefix + '/skills/python')
   })
 })
+
+test.describe('Update skill name', () => {
+  test('should response status "success" with message "Updating Skill name..." when request PATCH /skills/:key/actions/name', async ({
+    request,
+  }) => {
+    await request.post(apiUrlPrefix + '/skills',
+      {
+        data: {
+          key: 'python',
+          name: 'Python',
+          description: 'Python is an interpreted, high-level, general-purpose programming language.',
+          logo: 'https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg',
+          tags: ['programming language', 'scripting']
+        }
+      }
+    )
+    
+    const getResponseBefore = await request.get(apiUrlPrefix + '/skills/python')
+  
+    expect(getResponseBefore.ok()).toBeTruthy()
+    expect(await getResponseBefore.json()).toEqual(
+      expect.objectContaining({
+        status: 'success',
+        data: expect.objectContaining({
+          key: 'python',
+          name: 'Python',
+          description: expect.any(String),
+          logo: expect.any(String),
+          tags: expect.arrayContaining(['programming language', 'scripting']),
+        })
+      })
+    )
+
+    const updateResponse = await request.patch(apiUrlPrefix + '/skills/python/actions/name',
+      {
+        data: {
+          name: 'Python 3',
+        }
+      }
+    )
+
+    expect(updateResponse.ok()).toBeTruthy()
+    expect(await updateResponse.json()).toEqual(
+      expect.objectContaining({
+        status: 'success',
+        message: 'Updating Skill name...'
+      })
+    )
+
+    const getResponseAfter = await request.get(apiUrlPrefix + '/skills/python')
+  
+    expect(getResponseAfter.ok()).toBeTruthy()
+    expect(await getResponseAfter.json()).toEqual(
+      expect.objectContaining({
+        status: 'success',
+        data: expect.objectContaining({
+          key: 'python',
+          name: 'Python 3',
+          description: expect.any(String),
+          logo: expect.any(String),
+          tags: expect.any(Array),
+        })
+      })
+    )
+
+    await request.delete(apiUrlPrefix + '/skills/python')
+  })
+})
