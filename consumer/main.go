@@ -138,7 +138,6 @@ consume:
 			skill.ConsumeMessage(msg, skillHandler)
 			fmt.Printf("Message topic:%q partition:%d offset:%d key:%q message:%s\n", msg.Topic, msg.Partition, msg.Offset, msg.Key, msg.Value)
 			sess.MarkMessage(msg, "")
-			// sess.Commit()
 		// Should return when session.Context() is done.
 		// If not, will raise ErrRebalanceInProgress or read tcp <ip>:<port>: i/o timeout when kafka rebalance. see:
 		// https://github.com/IBM/sarama/issues/1192

@@ -18,7 +18,7 @@ func (handler *SkillHandler) createAndUpdateSkill(data []byte, action string, sk
 	skill, err := parseToSkill(data)
 
 	if err != nil {
-		log.Println("Error: Can't parse to skill struct")
+		log.Println("Error: Can't parse to skill struct :", err)
 		return
 	}
 
@@ -42,7 +42,7 @@ func (handler *SkillHandler) createAndUpdateSkill(data []byte, action string, sk
 	err = row.Scan(&skill.Key)
 
 	if err != nil {
-		log.Println(errMessage)
+		log.Println(errMessage, ":", err)
 		return
 	}
 }
@@ -53,7 +53,7 @@ func (handler *SkillHandler) deleteSkill(skillKey string, errMessage string) {
 	err := row.Scan(&skill.Key)
 
 	if err != nil {
-		log.Println(errMessage)
+		log.Println(errMessage, ":", err)
 		return
 	}
 }
