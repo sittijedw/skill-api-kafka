@@ -31,6 +31,8 @@ func ConsumeMessage(msg *sarama.ConsumerMessage, handler SkillHandler) {
 			handler.updateDescriptionByKeyHandler(value, skillKey)
 		} else if action == "update-logo" {
 			handler.updateLogoByKeyHandler(value, skillKey)
+		} else if action == "update-tags" {
+			handler.updateTagsByKeyHandler(value, skillKey)
 		}
 	}
 }

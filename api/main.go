@@ -40,6 +40,7 @@ func main() {
 		v1.PATCH("/skills/:key/actions/name", skillHandler.UpdateNameByKeyHandler)
 		v1.PATCH("/skills/:key/actions/description", skillHandler.UpdateDescriptionByKeyHandler)
 		v1.PATCH("/skills/:key/actions/logo", skillHandler.UpdateLogoByKeyHandler)
+		v1.PATCH("/skills/:key/actions/tags", skillHandler.UpdateTagsByKeyHandler)
 	}
 
 	srv := http.Server{

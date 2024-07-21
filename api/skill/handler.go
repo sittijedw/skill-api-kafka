@@ -116,6 +116,10 @@ func (handler *SkillHandler) UpdateLogoByKeyHandler(ctx *gin.Context) {
 	createAndUpdateSkill(ctx, "update-logo", "Updating Skill logo...")
 }
 
+func (handler *SkillHandler) UpdateTagsByKeyHandler(ctx *gin.Context) {
+	createAndUpdateSkill(ctx, "update-tags", "Updating Skill tags...")
+}
+
 func mapRowToSkill(row *sql.Row) (Skill, error) {
 	var skill Skill
 	err := row.Scan(&skill.Key, &skill.Name, &skill.Description, &skill.Logo, pq.Array(&skill.Tags))
