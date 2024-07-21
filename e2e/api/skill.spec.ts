@@ -36,4 +36,18 @@ test.describe('Get skill by key', () => {
 
     await request.delete(apiUrlPrefix + '/skills/python')
   })
+
+  test('should response status "error" with message "Skill not found" when request GET /skills/:key', async ({
+    request,
+  }) => {
+    const resp = await request.get(apiUrlPrefix + '/skills/python')
+  
+    expect(resp.status()).toEqual(404)
+    expect(await resp.json()).toEqual(
+      expect.objectContaining({
+        status: 'error',
+        message: 'Skill not found',
+      })
+    )
+  })
 })
