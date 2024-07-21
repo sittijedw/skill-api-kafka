@@ -128,4 +128,18 @@ test.describe('Get skills', () => {
     await request.delete(apiUrlPrefix + '/skills/go')
     await request.delete(apiUrlPrefix + '/skills/nodejs')
   })
+
+  test('should response empty list with status "success" when request GET /skills', async ({
+    request,
+  }) => {
+    const resp = await request.get(apiUrlPrefix + '/skills')
+  
+    expect(resp.ok()).toBeTruthy()
+    expect(await resp.json()).toEqual(
+      expect.objectContaining({
+        status: 'success',
+        data: expect.arrayContaining([])
+      })
+    )
+  })
 })
