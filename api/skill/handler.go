@@ -111,6 +111,27 @@ func (handler *SkillHandler) UpdateByKeyHandler(ctx *gin.Context) {
 	responseSuccess(ctx, "Updating Skill...", http.StatusOK)
 }
 
+func (handler *SkillHandler) UpdateNameByKeyHandler(ctx *gin.Context) {
+	key := ctx.Param("key")
+
+	var skill Skill
+
+	if err := ctx.BindJSON(&skill); err != nil {
+		responseError(ctx, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	skillString, err := parseToString(skill)
+
+	if err != nil {
+		responseError(ctx, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	sendMessage(skillString, "update-name-"+key)
+	responseSuccess(ctx, "Updateting Skill name...", http.StatusOK)
+}
+
 func mapRowToSkill(row *sql.Row) (Skill, error) {
 	var skill Skill
 	err := row.Scan(&skill.Key, &skill.Name, &skill.Description, &skill.Logo, pq.Array(&skill.Tags))

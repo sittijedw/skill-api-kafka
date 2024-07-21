@@ -13,7 +13,7 @@ func ConsumeMessage(msg *sarama.ConsumerMessage, handler SkillHandler) {
 
 	var action string
 	if len(splitKey) > 2 {
-		action = splitKey[0] + splitKey[1]
+		action = splitKey[0] + "-" + splitKey[1]
 	} else {
 		action = splitKey[0]
 	}
@@ -25,6 +25,8 @@ func ConsumeMessage(msg *sarama.ConsumerMessage, handler SkillHandler) {
 			handler.createHandler(value)
 		} else if action == "update" {
 			handler.updateByKeyHandler(value, skillKey)
+		} else if action == "update-name" {
+			handler.updateNameByKeyHandler(value, skillKey)
 		}
 	}
 }
