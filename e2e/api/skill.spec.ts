@@ -143,3 +143,59 @@ test.describe('Get skills', () => {
     )
   })
 })
+
+test.describe('Create skill', () => {
+  test('should response status "success" with message "Creating Skill..." when request POST /skills', async ({
+    request,
+  }) => {
+    const getResponseBefore = await request.get(apiUrlPrefix + '/skills')
+  
+    expect(getResponseBefore.ok()).toBeTruthy()
+    expect(await getResponseBefore.json()).toEqual(
+      expect.objectContaining({
+        status: 'success',
+        data: expect.arrayContaining([])
+      })
+    )
+
+    const postResponse = await request.post(apiUrlPrefix + '/skills',
+      {
+        data: {
+          key: 'python',
+          name: 'Python',
+          description: 'Python is an interpreted, high-level, general-purpose programming language.',
+          logo: 'https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg',
+          tags: ['programming language', 'scripting']
+        }
+      }
+    )
+
+    expect(postResponse.ok()).toBeTruthy()
+    expect(await postResponse.json()).toEqual(
+      expect.objectContaining({
+        status: 'success',
+        message: 'Creating Skill...'
+      })
+    )
+
+    const getResponseAfter = await request.get(apiUrlPrefix + '/skills')
+  
+    expect(getResponseAfter.ok()).toBeTruthy()
+    expect(await getResponseAfter.json()).toEqual(
+      expect.objectContaining({
+        status: 'success',
+        data: expect.arrayContaining([
+          {
+            key: 'python',
+            name: 'Python',
+            description: expect.any(String),
+            logo: expect.any(String),
+            tags: expect.arrayContaining(['programming language', 'scripting']),
+          }
+        ])
+      })
+    )
+
+    await request.delete(apiUrlPrefix + '/skills/python')
+  })
+})
