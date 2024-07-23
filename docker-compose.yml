@@ -77,3 +77,20 @@ services:
       - 5432:5432
     volumes:
       - ./migrations:/docker-entrypoint-initdb.d/
+
+  kafka-api:
+    image: kafka-api:1.0.0
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    env_file: ./api/.env
+    ports:
+      - 8910:8910
+    restart: always
+
+  kafka-consumer:
+    image: kafka-consumer:1.0.0
+    build:
+      context: ./consumer
+      dockerfile: Dockerfile
+    env_file: ./consumer/.env
