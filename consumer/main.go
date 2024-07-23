@@ -42,7 +42,7 @@ func init() {
 func main() {
 	config := configConsumerGroup()
 
-	consumer := Consumer{
+	consumer := consumer{
 		ready: make(chan struct{}),
 	}
 
@@ -111,16 +111,16 @@ func configConsumerGroup() *sarama.Config {
 	return config
 }
 
-type Consumer struct {
+type consumer struct {
 	ready chan struct{}
 }
 
-func (consumer Consumer) Setup(_ sarama.ConsumerGroupSession) error {
+func (consumer consumer) Setup(_ sarama.ConsumerGroupSession) error {
 	close(consumer.ready)
 	return nil
 }
-func (Consumer) Cleanup(_ sarama.ConsumerGroupSession) error { return nil }
-func (Consumer) ConsumeClaim(sess sarama.ConsumerGroupSession, claim sarama.ConsumerGroupClaim) error {
+func (consumer) Cleanup(_ sarama.ConsumerGroupSession) error { return nil }
+func (consumer) ConsumeClaim(sess sarama.ConsumerGroupSession, claim sarama.ConsumerGroupClaim) error {
 	// NOTE:
 	// Do not move the code below to a goroutine.
 	// The ConsumeClaim itself is called within a goroutine, see:

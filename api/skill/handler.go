@@ -9,29 +9,29 @@ import (
 	"github.com/lib/pq"
 )
 
-type Response struct {
+type response struct {
 	Status  string `json:"status"`
 	Message string `json:"message"`
 }
 
-type ResponseData interface {
-	Skill | []Skill
+type responseData interface {
+	skill | []skill
 }
 
-type ResponseWithData[responseData Skill | []Skill] struct {
-	Status string       `json:"status"`
-	Data   responseData `json:"data"`
+type responseWithData[respData skill | []skill] struct {
+	Status string   `json:"status"`
+	Data   respData `json:"data"`
 }
 
-type SkillHandler struct {
-	repository SkillRepository
+type skillHandler struct {
+	repository skillRepository
 }
 
-func NewHandler(repository SkillRepository) SkillHandler {
-	return SkillHandler{repository: repository}
+func NewHandler(repository skillRepository) skillHandler {
+	return skillHandler{repository: repository}
 }
 
-func (handler *SkillHandler) GetByKeyHandler(ctx *gin.Context) {
+func (handler *skillHandler) GetByKeyHandler(ctx *gin.Context) {
 	key := ctx.Param("key")
 
 	row := handler.repository.findSkillByKey(key)
@@ -46,7 +46,7 @@ func (handler *SkillHandler) GetByKeyHandler(ctx *gin.Context) {
 	responseSuccessWithData(ctx, skill, http.StatusOK)
 }
 
-func (handler *SkillHandler) GetAllHandler(ctx *gin.Context) {
+func (handler *skillHandler) GetAllHandler(ctx *gin.Context) {
 	rows, err := handler.repository.findAll()
 
 	if err != nil {
@@ -54,9 +54,9 @@ func (handler *SkillHandler) GetAllHandler(ctx *gin.Context) {
 		return
 	}
 
-	var skills = make([]Skill, 0)
+	var skills = make([]skill, 0)
 	for rows.Next() {
-		var skill Skill
+		var skill skill
 
 		err := rows.Scan(&skill.Key, &skill.Name, &skill.Description, &skill.Logo, pq.Array(&skill.Tags))
 
@@ -74,7 +74,7 @@ func (handler *SkillHandler) GetAllHandler(ctx *gin.Context) {
 func createAndUpdateSkill(ctx *gin.Context, action string, respMessage string) {
 	key := ctx.Param("key")
 
-	var skill Skill
+	var skill skill
 
 	if err := ctx.BindJSON(&skill); err != nil {
 		responseError(ctx, err.Error(), http.StatusInternalServerError)
@@ -103,57 +103,57 @@ func deleteSkill(ctx *gin.Context, action string, respMessage string) {
 	responseSuccess(ctx, respMessage, http.StatusOK)
 }
 
-func (handler *SkillHandler) CreateHandler(ctx *gin.Context) {
+func (handler *skillHandler) CreateHandler(ctx *gin.Context) {
 	createAndUpdateSkill(ctx, "create", "Creating Skill...")
 }
 
-func (handler *SkillHandler) UpdateByKeyHandler(ctx *gin.Context) {
+func (handler *skillHandler) UpdateByKeyHandler(ctx *gin.Context) {
 	createAndUpdateSkill(ctx, "update", "Updating Skill...")
 }
 
-func (handler *SkillHandler) UpdateNameByKeyHandler(ctx *gin.Context) {
+func (handler *skillHandler) UpdateNameByKeyHandler(ctx *gin.Context) {
 	createAndUpdateSkill(ctx, "update-name", "Updating Skill name...")
 }
 
-func (handler *SkillHandler) UpdateDescriptionByKeyHandler(ctx *gin.Context) {
+func (handler *skillHandler) UpdateDescriptionByKeyHandler(ctx *gin.Context) {
 	createAndUpdateSkill(ctx, "update-description", "Updating Skill description...")
 }
 
-func (handler *SkillHandler) UpdateLogoByKeyHandler(ctx *gin.Context) {
+func (handler *skillHandler) UpdateLogoByKeyHandler(ctx *gin.Context) {
 	createAndUpdateSkill(ctx, "update-logo", "Updating Skill logo...")
 }
 
-func (handler *SkillHandler) UpdateTagsByKeyHandler(ctx *gin.Context) {
+func (handler *skillHandler) UpdateTagsByKeyHandler(ctx *gin.Context) {
 	createAndUpdateSkill(ctx, "update-tags", "Updating Skill tags...")
 }
 
-func (handler *SkillHandler) DeleteByKeyHandler(ctx *gin.Context) {
+func (handler *skillHandler) DeleteByKeyHandler(ctx *gin.Context) {
 	deleteSkill(ctx, "delete", "Deleting Skill...")
 }
 
-func mapRowToSkill(row *sql.Row) (Skill, error) {
-	var skill Skill
+func mapRowToSkill(row *sql.Row) (skill, error) {
+	var skill skill
 	err := row.Scan(&skill.Key, &skill.Name, &skill.Description, &skill.Logo, pq.Array(&skill.Tags))
 
 	return skill, err
 }
 
 func responseError(ctx *gin.Context, message string, statusCode int) {
-	response := Response{Status: "error", Message: message}
+	response := response{Status: "error", Message: message}
 	ctx.JSON(statusCode, response)
 }
 
 func responseSuccess(ctx *gin.Context, message string, statusCode int) {
-	response := Response{Status: "success", Message: message}
+	response := response{Status: "success", Message: message}
 	ctx.JSON(statusCode, response)
 }
 
-func responseSuccessWithData[responseData ResponseData](ctx *gin.Context, data responseData, statusCode int) {
-	response := ResponseWithData[responseData]{Status: "success", Data: data}
+func responseSuccessWithData[respData responseData](ctx *gin.Context, data respData, statusCode int) {
+	response := responseWithData[respData]{Status: "success", Data: data}
 	ctx.JSON(statusCode, response)
 }
 
-func parseToString[responseData ResponseData](data responseData) (string, error) {
+func parseToString[respData responseData](data respData) (string, error) {
 	productsJson, err := json.Marshal(data)
 
 	if err != nil {

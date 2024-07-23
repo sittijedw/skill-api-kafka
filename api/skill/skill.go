@@ -1,6 +1,6 @@
 package skill
 
-type Skill struct {
+type skill struct {
 	Key         string   `json:"key"`
 	Name        string   `json:"name"`
 	Description string   `json:"description"`

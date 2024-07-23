@@ -49,7 +49,7 @@ func configProducer() *sarama.Config {
 	config := sarama.NewConfig()
 	config.Producer.Return.Successes = true
 	config.Producer.Return.Errors = true
-	config.Producer.Partitioner = sarama.NewRoundRobinPartitioner
+	config.Producer.Partitioner = sarama.NewRandomPartitioner
 	config.Producer.RequiredAcks = sarama.NoResponse
 
 	return config

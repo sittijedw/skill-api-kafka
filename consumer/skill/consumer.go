@@ -6,7 +6,7 @@ import (
 	"github.com/IBM/sarama"
 )
 
-func ConsumeMessage(msg *sarama.ConsumerMessage, handler SkillHandler) {
+func ConsumeMessage(msg *sarama.ConsumerMessage, handler skillHandler) {
 	topic, key, value := msg.Topic, string(msg.Key), msg.Value
 
 	splitKey := strings.Split(key, "-")

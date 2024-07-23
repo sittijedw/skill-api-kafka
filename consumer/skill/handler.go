@@ -6,15 +6,15 @@ import (
 	"log"
 )
 
-type SkillHandler struct {
-	repository SkillRepository
+type skillHandler struct {
+	repository skillRepository
 }
 
-func NewHandler(repository SkillRepository) SkillHandler {
-	return SkillHandler{repository: repository}
+func NewHandler(repository skillRepository) skillHandler {
+	return skillHandler{repository: repository}
 }
 
-func (handler *SkillHandler) createAndUpdateSkill(data []byte, action string, skillKey string, errMessage string) {
+func (handler *skillHandler) createAndUpdateSkill(data []byte, action string, skillKey string, errMessage string) {
 	skill, err := parseToSkill(data)
 
 	if err != nil {
@@ -47,8 +47,8 @@ func (handler *SkillHandler) createAndUpdateSkill(data []byte, action string, sk
 	}
 }
 
-func (handler *SkillHandler) deleteSkill(skillKey string, errMessage string) {
-	var skill Skill
+func (handler *skillHandler) deleteSkill(skillKey string, errMessage string) {
+	var skill skill
 	row := handler.repository.deleteByKey(skillKey)
 	err := row.Scan(&skill.Key)
 
@@ -58,36 +58,36 @@ func (handler *SkillHandler) deleteSkill(skillKey string, errMessage string) {
 	}
 }
 
-func (handler *SkillHandler) createHandler(data []byte) {
+func (handler *skillHandler) createHandler(data []byte) {
 	handler.createAndUpdateSkill(data, "create", "", "Error: Skill already exists")
 }
 
-func (handler *SkillHandler) updateByKeyHandler(data []byte, skillKey string) {
+func (handler *skillHandler) updateByKeyHandler(data []byte, skillKey string) {
 	handler.createAndUpdateSkill(data, "update", skillKey, "Error: Unable to update skill")
 }
 
-func (handler *SkillHandler) updateNameByKeyHandler(data []byte, skillKey string) {
+func (handler *skillHandler) updateNameByKeyHandler(data []byte, skillKey string) {
 	handler.createAndUpdateSkill(data, "update-name", skillKey, "Error: Unable to update skill name")
 }
 
-func (handler *SkillHandler) updateDescriptionByKeyHandler(data []byte, skillKey string) {
+func (handler *skillHandler) updateDescriptionByKeyHandler(data []byte, skillKey string) {
 	handler.createAndUpdateSkill(data, "update-description", skillKey, "Error: Unable to update skill description")
 }
 
-func (handler *SkillHandler) updateLogoByKeyHandler(data []byte, skillKey string) {
+func (handler *skillHandler) updateLogoByKeyHandler(data []byte, skillKey string) {
 	handler.createAndUpdateSkill(data, "update-logo", skillKey, "Error: Unable to update skill logo")
 }
 
-func (handler *SkillHandler) updateTagsByKeyHandler(data []byte, skillKey string) {
+func (handler *skillHandler) updateTagsByKeyHandler(data []byte, skillKey string) {
 	handler.createAndUpdateSkill(data, "update-tags", skillKey, "Error: Unable to update skill tags")
 }
 
-func (handler *SkillHandler) deleteByKeyHandler(skillKey string) {
+func (handler *skillHandler) deleteByKeyHandler(skillKey string) {
 	handler.deleteSkill(skillKey, "Error: Unable to delete skill")
 }
 
-func parseToSkill(data []byte) (Skill, error) {
-	var skill Skill
+func parseToSkill(data []byte) (skill, error) {
+	var skill skill
 	err := json.Unmarshal([]byte(data), &skill)
 
 	return skill, err
