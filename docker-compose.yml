@@ -79,7 +79,9 @@ services:
       - ./migrations:/docker-entrypoint-initdb.d/
 
   kafka-api:
-    image: kafka-api:1.0.0
+    image: ghcr.io/sittijedw/kafka-api:1.0.0
+    depends_on:
+      - database
     build:
       context: ./api
       dockerfile: Dockerfile
@@ -89,8 +91,12 @@ services:
     restart: always
 
   kafka-consumer:
-    image: kafka-consumer:1.0.0
+    image: ghcr.io/sittijedw/kafka-consumer:1.0.0
+    depends_on:
+      - database
+      - kafka-api
     build:
       context: ./consumer
       dockerfile: Dockerfile
     env_file: ./consumer/.env
+    restart: always
