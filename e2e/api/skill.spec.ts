@@ -1,6 +1,6 @@
 import {test, expect} from '@playwright/test'
 
-const apiUrlPrefix = 'http://localhost:8910/api/v1'
+const apiUrlPrefix = 'http://kafka-api:8910/api/v1'
 
 test.describe('Get skill by key', () => {
   test('should response one skill with status "success" when request GET /skills/:key', async ({
