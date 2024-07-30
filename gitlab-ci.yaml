@@ -1,0 +1,17 @@
+stages:
+    - test
+    - build
+
+image: docker:latest
+services:
+    - docker:dind
+before_script:
+    - apk add --no-cache npm
+    - apk add --no-cache make
+    - cp ${API_ENV} ./api/.env
+    - cp ${CONSUMER_ENV} ./consumer/.env
+
+docker-compose-up:
+    script:
+        - make run
+        - docker compose down
