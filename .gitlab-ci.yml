@@ -14,4 +14,5 @@ test:
     stage: test
     script:
         - make run
+        - docker logs skill-api-kafka-playwright-test-1
         - docker compose down
