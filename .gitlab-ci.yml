@@ -12,6 +12,4 @@ before_script:
 test:
     stage: test
     script:
-        - make run
-        - sleep 20
-        - docker logs skill-api-kafka-playwright-test-1
+        - docker compose up
