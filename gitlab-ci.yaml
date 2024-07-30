@@ -1,6 +1,5 @@
 stages:
     - test
-    - build
 
 image: docker:latest
 services:
@@ -11,7 +10,8 @@ before_script:
     - cp ${API_ENV} ./api/.env
     - cp ${CONSUMER_ENV} ./consumer/.env
 
-docker-compose-up:
+test:
+    stage: test
     script:
-        - make run
-        - docker compose down
+		- make run
+		- docker compose down
