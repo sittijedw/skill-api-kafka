@@ -1,6 +1,7 @@
 import {test, expect} from '@playwright/test'
 
 const apiUrlPrefix = 'http://kafka-api:8910/api/v1'
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 test.describe('Get skill by key', () => {
   test('should response one skill with status "success" when request GET /skills/:key', async ({
@@ -17,6 +18,7 @@ test.describe('Get skill by key', () => {
         }
       }
     )
+    await sleep(3000)
 
     const resp = await request.get(apiUrlPrefix + '/skills/python')
   
@@ -35,6 +37,7 @@ test.describe('Get skill by key', () => {
     )
 
     await request.delete(apiUrlPrefix + '/skills/python')
+    await sleep(3000)
   })
 
   test('should response status "error" with message "Skill not found" when request GET /skills/:key', async ({
@@ -91,6 +94,7 @@ test.describe('Get skills', () => {
         }
       }
     )
+    await sleep(3000)
 
     const resp = await request.get(apiUrlPrefix + '/skills')
   
@@ -127,6 +131,7 @@ test.describe('Get skills', () => {
     await request.delete(apiUrlPrefix + '/skills/python')
     await request.delete(apiUrlPrefix + '/skills/go')
     await request.delete(apiUrlPrefix + '/skills/nodejs')
+    await sleep(3000)
   })
 
   test('should response empty list with status "success" when request GET /skills', async ({
@@ -177,6 +182,7 @@ test.describe('Create skill', () => {
         message: 'Creating Skill...'
       })
     )
+    await sleep(3000)
 
     const getResponseAfter = await request.get(apiUrlPrefix + '/skills')
   
@@ -197,6 +203,7 @@ test.describe('Create skill', () => {
     )
 
     await request.delete(apiUrlPrefix + '/skills/python')
+    await sleep(3000)
   })
 })
 
@@ -215,6 +222,7 @@ test.describe('Update skill', () => {
         }
       }
     )
+    await sleep(3000)
     
     const getResponseBefore = await request.get(apiUrlPrefix + '/skills/python')
   
@@ -250,6 +258,7 @@ test.describe('Update skill', () => {
         message: 'Updating Skill...'
       })
     )
+    await sleep(3000)
 
     const getResponseAfter = await request.get(apiUrlPrefix + '/skills/python')
   
@@ -268,6 +277,7 @@ test.describe('Update skill', () => {
     )
 
     await request.delete(apiUrlPrefix + '/skills/python')
+    await sleep(3000)
   })
 })
 
@@ -286,6 +296,7 @@ test.describe('Update skill name', () => {
         }
       }
     )
+    await sleep(3000)
     
     const getResponseBefore = await request.get(apiUrlPrefix + '/skills/python')
   
@@ -318,6 +329,7 @@ test.describe('Update skill name', () => {
         message: 'Updating Skill name...'
       })
     )
+    await sleep(3000)
 
     const getResponseAfter = await request.get(apiUrlPrefix + '/skills/python')
   
@@ -336,6 +348,7 @@ test.describe('Update skill name', () => {
     )
 
     await request.delete(apiUrlPrefix + '/skills/python')
+    await sleep(3000)
   })
 })
 
@@ -354,6 +367,7 @@ test.describe('Update skill description', () => {
         }
       }
     )
+    await sleep(3000)
     
     const getResponseBefore = await request.get(apiUrlPrefix + '/skills/python')
   
@@ -386,6 +400,7 @@ test.describe('Update skill description', () => {
         message: 'Updating Skill description...'
       })
     )
+    await sleep(3000)
 
     const getResponseAfter = await request.get(apiUrlPrefix + '/skills/python')
   
@@ -404,6 +419,7 @@ test.describe('Update skill description', () => {
     )
 
     await request.delete(apiUrlPrefix + '/skills/python')
+    await sleep(3000)
   })
 })
 
@@ -422,6 +438,7 @@ test.describe('Update skill logo', () => {
         }
       }
     )
+    await sleep(3000)
     
     const getResponseBefore = await request.get(apiUrlPrefix + '/skills/python')
   
@@ -454,6 +471,7 @@ test.describe('Update skill logo', () => {
         message: 'Updating Skill logo...'
       })
     )
+    await sleep(3000)
 
     const getResponseAfter = await request.get(apiUrlPrefix + '/skills/python')
   
@@ -472,6 +490,7 @@ test.describe('Update skill logo', () => {
     )
 
     await request.delete(apiUrlPrefix + '/skills/python')
+    await sleep(3000)
   })
 })
 
@@ -490,6 +509,7 @@ test.describe('Update skill tags', () => {
         }
       }
     )
+    await sleep(3000)
     
     const getResponseBefore = await request.get(apiUrlPrefix + '/skills/python')
   
@@ -522,6 +542,7 @@ test.describe('Update skill tags', () => {
         message: 'Updating Skill tags...'
       })
     )
+    await sleep(3000)
 
     const getResponseAfter = await request.get(apiUrlPrefix + '/skills/python')
   
@@ -540,6 +561,7 @@ test.describe('Update skill tags', () => {
     )
 
     await request.delete(apiUrlPrefix + '/skills/python')
+    await sleep(3000)
   })
 })
 
@@ -558,6 +580,7 @@ test.describe('Delete skill', () => {
         }
       }
     )
+    await sleep(3000)
     
     const getResponseBefore = await request.get(apiUrlPrefix + '/skills/python')
   
@@ -584,6 +607,7 @@ test.describe('Delete skill', () => {
         message: 'Deleting Skill...',
       })
     )
+    await sleep(3000)
 
     const getResponseAfter = await request.get(apiUrlPrefix + '/skills/python')
   
