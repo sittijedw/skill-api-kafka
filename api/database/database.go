@@ -33,7 +33,7 @@ func CreateSkillTable(db *sql.DB) {
 	_, err := db.Exec(sqlStatement)
 
 	if err != nil {
-		log.Println("Error: Can't create skill table", err)
+		log.Panic("Error: Can't create skill table", err)
 	} else {
 		log.Println("Create skill table success")
 	}

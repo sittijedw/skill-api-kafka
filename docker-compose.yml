@@ -1,5 +1,3 @@
-version: '3.7'
-
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
@@ -91,7 +89,27 @@ services:
       - 8910:8910
     restart: always
 
-  kafka-consumer:
+  kafka-consumer-1:
+    image: ghcr.io/sittijedw/kafka-consumer:1.0.0
+    depends_on:
+      - kafka-api
+    build:
+      context: ./consumer
+      dockerfile: Dockerfile
+    env_file: ./consumer/.env
+    restart: always
+
+  kafka-consumer-2:
+    image: ghcr.io/sittijedw/kafka-consumer:1.0.0
+    depends_on:
+      - kafka-api
+    build:
+      context: ./consumer
+      dockerfile: Dockerfile
+    env_file: ./consumer/.env
+    restart: always
+
+  kafka-consumer-3:
     image: ghcr.io/sittijedw/kafka-consumer:1.0.0
     depends_on:
       - kafka-api
@@ -104,7 +122,9 @@ services:
   playwright-test:
     image: ghcr.io/sittijedw/playwright-test:1.0.0
     depends_on:
-      - kafka-consumer
+      - kafka-consumer-1
+      - kafka-consumer-2
+      - kafka-consumer-3
     build:
       context: ./e2e
       dockerfile: Dockerfile

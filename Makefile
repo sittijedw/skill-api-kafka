@@ -1,5 +1,5 @@
 build:
-	docker compose build kafka-api kafka-consumer playwright-test
+	docker compose build
 run:
 	docker compose up -d
 push:
