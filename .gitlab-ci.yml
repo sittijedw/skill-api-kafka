@@ -12,4 +12,6 @@ before_script:
 test:
     stage: test
     script:
-        - docker compose up
+        - docker compose up -d zookeeper kafka-1 kafka-2 kafka-3 kafka-ui database kafka-api kafka-consumer
+        - sleep 20
+        - docker compose up playwright-test
