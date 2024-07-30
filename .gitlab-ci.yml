@@ -13,5 +13,5 @@ before_script:
 test:
     stage: test
     script:
-		- make run
-		- docker compose down
+        - make run
+        - docker compose down
