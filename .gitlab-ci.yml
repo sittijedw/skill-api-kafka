@@ -13,9 +13,8 @@ build-image:
 
 playwright-test:
     stage: test
-    before-script:
+    script:
         - docker compose up -d zookeeper kafka-1 kafka-2 kafka-3 kafka-ui database kafka-api kafka-consumer-1 kafka-consumer-2 kafka-consumer-3
         - sleep 40
         - docker container ls
-    script:
         - docker compose up playwright-test
